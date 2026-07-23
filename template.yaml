@@ -1,0 +1,23 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: API Gateway
+Globals:
+  Function:
+    Runtime: nodejs24.x
+    Handler: index.handler
+    Timeout: 10
+Resources:
+  HealthFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambda/dist/
+      Events:
+        HealthApi:
+          Type: Api
+          Properties:
+            Path: /health
+            Method: get
+Outputs:
+  HealthApiUrl:
+    Description: Invoke URL for the health endpoint
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/v1/health"
