@@ -11,9 +11,8 @@ export default $config({
   },
   async run() {
     const api = new sst.aws.ApiGatewayV2("ipms-api", {});
-    api.route("ANY /v1", {
-      bundle: "lambda/dist",
-      handler: "index.handler"
+    api.route("$default", {
+      handler: "lambda/index.handler"
     });
   },
 });
