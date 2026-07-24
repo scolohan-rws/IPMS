@@ -13,10 +13,11 @@
     "node": "^18 || ^20"
   },
   "dependencies": {
-    "@aws-lambda-powertools/event-handler": "^2.3.0"
+    "@aws-lambda-powertools/event-handler": "^2.3.0",
+    "sst": "4.17.1"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.159",
+    "@types/aws-lambda": "8.10.162",
     "@types/node": "^20.14.0",
     "typescript": "^7.0.0"
   }

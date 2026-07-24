@@ -8,7 +8,11 @@ const app = new Router();
 
 const healthCheck = async () => ({ status: 'ok' });
 
+app.get('/',  async () => {
+  return { message: 'ok' }; 
+});
 app.get('/health', healthCheck);
+
 
 export const handler = async (event: ipmsEvent, context: Context) =>
   app.resolve(event, context);
