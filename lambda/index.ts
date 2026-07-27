@@ -1,18 +1,15 @@
-import { Router } from '@aws-lambda-powertools/event-handler/http';
-import type { Context } from 'aws-lambda';
+import type {
+  APIGatewayProxyHandlerV2,
+  APIGatewayProxyStructuredResultV2,
+} from "aws-lambda";
 
-type ipmsEvent = {
-}
+export const healthCheck =
+  async (): Promise<APIGatewayProxyStructuredResultV2> => ({
+    statusCode: 200,
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({ status: "ok" }),
+  });
 
-const app = new Router();
-
-const healthCheck = async () => ({ status: 'ok' });
-
-app.get('/v1', () => {
-  return { message: 'ok' };
-});
-app.get('/v1/health', healthCheck);
-
-
-export const handler = async (event: ipmsEvent, context: Context) =>
-  app.resolve(event, context);
+export const handler: APIGatewayProxyHandlerV2 = healthCheck;
