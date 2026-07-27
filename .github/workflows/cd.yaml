@@ -10,7 +10,7 @@ jobs:
     permissions:
       id-token: write
       contents: read
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     environment: ${{ github.event.release.prerelease == true && 'dev' || 'prod' }}
     concurrency:
       group: deploy-${{ github.event.release.prerelease && 'dev' || 'prod' }}

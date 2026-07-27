@@ -45,7 +45,7 @@ the repository's GitHub OIDC identity for the corresponding environment. The
 workflow uses short-lived OIDC credentials; AWS access keys are not stored in
 GitHub.
 
-Deployment runs on a self-hosted runner and uses the official GitHub and AWS
+Deployment runs on a ubuntu-latest runner and uses the official GitHub and AWS
 setup actions.
 
 The deployment prints `healthUrl`, the complete URL of the health endpoint, as
