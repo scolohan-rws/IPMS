@@ -1,0 +1,28 @@
+{
+  "name": "ipms-lambda",
+  "version": "1.0.0",
+  "description": "AWS Lambda for IPMS API Gateway",
+  "type": "module",
+  "main": "lambda/dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "deploy": "sst deploy",
+    "remove": "sst remove",
+    "dev": "sst dev",
+    "start": "npm run build && node lambda/dist/index.js",
+    "test": "npm run build && node --test lambda/dist/index.test.js",
+    "typecheck": "tsc --noEmit",
+    "watch": "tsc --watch"
+  },
+  "engines": {
+    "node": "^24"
+  },
+  "dependencies": {
+    "sst": "4.17.1"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "8.10.162",
+    "@types/node": "^20.14.0",
+    "typescript": "^7.0.0"
+  }
+}
