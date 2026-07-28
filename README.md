@@ -49,11 +49,11 @@ npm run dev
 
 Create `dev` and `prod` GitHub environments with:
 
-- `AWS_ACCOUNT_ID`
+- `AWS_ACCESS_ROLE` — full ARN of the AWS deployment role
 - `AWS_REGION`
 
-Each AWS account must provide an `sst-deployment` IAM role trusted through
-GitHub OIDC. Long-lived AWS access keys must not be stored in GitHub.
+The configured role must trust the repository's GitHub OIDC identity for the
+matching environment. Long-lived AWS access keys must not be stored in GitHub.
 
 Production deployments require approval from an authorized reviewer other than
 the deployment initiator.
