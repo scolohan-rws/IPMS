@@ -47,9 +47,9 @@ npm run dev
 | `dev` | Integration and acceptance testing | Prerelease | `dev` |
 | `prod` | Production | Regular release | `prod` |
 
-Create `dev` and `prod` GitHub environments with:
+Create `dev` and `prod` GitHub environments with these environment secrets:
 
-- `AWS_ACCESS_ROLE` — full ARN of the AWS deployment role
+- `AWS_ACCESS_ROLE`: full ARN of the AWS deployment role
 - `AWS_REGION`
 
 The configured role must trust the repository's GitHub OIDC identity for the
