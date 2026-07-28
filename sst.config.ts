@@ -31,6 +31,7 @@ export default $config({
     });
 
     api.route("GET /health", {
+      name: `${$app.name}-${$app.stage}-health`,
       handler: "lambda/index.handler",
       runtime: "nodejs24.x",
     });
