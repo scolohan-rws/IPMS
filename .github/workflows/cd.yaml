@@ -17,7 +17,7 @@ jobs:
       cancel-in-progress: false
     env:
       ENVIRONMENT: ${{ github.event.release.prerelease == true && 'dev' || 'prod' }}
-      AWS_REGION: ${{ vars.AWS_REGION }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
       BUILD_VERSION: ${{ github.event.release.tag_name }}
 
     steps:
@@ -33,9 +33,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v6.1.0
         with:
-          aws-region: ${{ vars.AWS_REGION }}
-          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/sst-deployment
-          allowed-account-ids: ${{ vars.AWS_ACCOUNT_ID }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_ACCESS_ROLE }}
           role-session-name: ipms-${{ github.run_id }}
 
       - name: Verify AWS identity
