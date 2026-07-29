@@ -5,18 +5,69 @@
 IPMS is an API deployed to AWS with SST.
 
 Available endpoint:
+ 
+| Method | Path | Auth | Handler |
+| --- | --- | --- | --- |
+| `GET` | `/health` | none | `lambdas/healthCheck.ts` |
+| `GET` | `/secured` | bearer token | `lambdas/securedLambda.ts` |
 
-```text
-GET /health
-```
-
-Successful response:
-
+Successful `/health` response:
+ 
 ```json
 {
   "status": "ok"
 }
 ```
+
+Successful `/secured` response:
+ 
+```json
+{
+  "message": "Access granted!",
+  "principalId": "user"
+}
+```
+
+Authorizers on API Gateway V2 are attached per route. `/health` declares no
+authorizer and is therefore public by construction.
+
+### 1.1 Authentication
+ 
+`/secured` is protected by a Lambda authorizer owned by the `auth` repository. This
+stack does not define an authorizer function; it creates its own
+`aws.apigatewayv2.Authorizer` pointing at the function published by `auth`, plus
+an `aws.lambda.Permission` allowing this API to invoke it.
+ 
+The function ARNs are read from SSM Parameter Store at deploy time:
+ 
+| Parameter | Used for |
+| --- | --- |
+| `/ipms-auth/<stage>/authorizer/arn` | `aws.lambda.Permission` target |
+| `/ipms-auth/<stage>/authorizer/invoke-arn` | `authorizerUri` |
+ 
+Requests supply `Authorization: Bearer <token>`. The authorizer's context surfaces
+at `event.requestContext.authorizer.lambda` as `{ principalId }`; the
+type is duplicated in this repository and must stay in step with `auth`.
+ 
+Consequences:
+ 
+- `auth` must be deployed to a stage before this stack. A missing parameter fails
+  the deploy.
+- This stack must be removed before `auth`. There is no cross-stack dependency to
+  enforce it, so removing `auth` first leaves protected routes failing at runtime
+  only.
+- Stages are coupled by name: `ipms` `dev` reads `auth` `dev`.
+- Resolution is deploy-time, not runtime. If `auth` replaces the authorizer
+  function, this stack must be redeployed.
+Failure modes:
+ 
+| Symptom | Cause |
+| --- | --- |
+| `401` on `/secured`, no authorizer logs | `Authorization` header absent; it is an identity source, so API Gateway rejects before invoking. |
+| `403` on `/secured` | Authorizer denied. Simple-response authorizers cannot return `401`. |
+| `500` on `/secured`, `Lambda function ... is not authorized` in execution logs | Invoke permission missing or its `sourceArn` does not match the authorizer id. |
+| Revoked token still accepted for a few minutes | 300-second authorizer result cache, keyed on the token string. |
+
 
 ## 2. Local development
 

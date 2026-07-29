@@ -8,11 +8,11 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "outDir": "lambda/dist",
-    "rootDir": "lambda",
+    "outDir": "lambdas/dist",
+    "rootDir": "lambdas",
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "types": ["node"]
   },
-  "include": ["lambda/**/*.ts"]
+  "include": ["lambdas/**/*.ts"]
 }
