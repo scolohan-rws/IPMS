@@ -29,6 +29,8 @@ Install dependencies and validate the project:
 
 ```bash
 npm ci
+npm run format:check
+npm run lint
 npm run typecheck
 npm test
 ```
@@ -38,6 +40,33 @@ Additional commands:
 ```bash
 npm run build
 npm run dev
+```
+
+### 2.1 Formatting and linting
+
+Biome formats TypeScript, JavaScript, and JSON files with two-space indentation
+and checks them for lint problems. Diagnostics include the exact file, line, and
+rule.
+
+```bash
+npm run format         # Format the project
+npm run format:check   # Check formatting without changing files
+npm run lint           # Lint the project
+npm run lint:fix       # Apply safe lint fixes
+```
+
+Before each commit, Husky formats and lints staged files. Formatting changes are
+added to the commit automatically. Lint errors block the commit; warnings remain
+visible for review. To skip the checks once, use:
+
+```bash
+SKIP_LINT=1 git commit -m "message"
+```
+
+In PowerShell:
+
+```powershell
+$env:SKIP_LINT="1"; git commit -m "message"; Remove-Item Env:SKIP_LINT
 ```
 
 ## 3. Environments
@@ -133,6 +162,8 @@ Required PR checks:
 
 ```text
 npm ci
+npm run format:check
+npm run lint
 npm run typecheck
 npm test
 ```

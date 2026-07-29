@@ -7,11 +7,11 @@
 declare module "sst" {
   export interface Resource {
     "ipms-api": {
-      "type": "sst.aws.ApiGatewayV2"
-      "url": string
-    }
+      type: "sst.aws.ApiGatewayV2";
+      url: string;
+    };
   }
 }
 
-import "sst"
-export {}
+import "sst";
+export {};
