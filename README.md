@@ -100,6 +100,7 @@ and checks them for lint problems. Diagnostics include the exact file, line, and
 rule.
 
 ```bash
+npm run check          # Check formatting and lint
 npm run format         # Format the project
 npm run format:check   # Check formatting without changing files
 npm run lint           # Lint the project
@@ -213,15 +214,14 @@ Required PR checks:
 
 ```text
 npm ci
-npm run format:check
-npm run lint
+npm run check
 npm run typecheck
 npm test
 ```
 
-The repository currently runs these checks during release deployment. A
-pull-request CI workflow must be added before the checks are configured as
-required in GitHub.
+Biome runs automatically for every non-draft pull request. Typecheck and tests
+currently run during release deployment and must be added to pull-request CI
+before they are configured as required GitHub checks.
 
 ## 6. Versioning
 

@@ -6,6 +6,7 @@
   "main": "lambda/dist/index.js",
   "scripts": {
     "build": "tsc",
+    "check": "biome check .",
     "deploy": "sst deploy",
     "remove": "sst remove",
     "dev": "sst dev",
