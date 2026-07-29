@@ -219,9 +219,8 @@ npm run typecheck
 npm test
 ```
 
-Biome runs automatically for every non-draft pull request. Typecheck and tests
-currently run during release deployment and must be added to pull-request CI
-before they are configured as required GitHub checks.
+Formatting, lint, typecheck, and tests run automatically for every non-draft
+pull request in `.github/workflows/pr-validation.yml`.
 
 ## 6. Versioning
 
