@@ -97,7 +97,7 @@ npm run dev
 
 Biome formats TypeScript, JavaScript, and JSON files with two-space indentation
 and checks them for lint problems. Diagnostics include the exact file, line, and
-rule.
+rule. Generated `.sst`, `lambdas/dist`, and `sst-env.d.ts` files are excluded.
 
 ```bash
 npm run check          # Check formatting and lint

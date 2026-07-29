@@ -7,7 +7,7 @@
     "defaultBranch": "main"
   },
   "files": {
-    "includes": ["**", "!lambda/dist", "!.sst"]
+    "includes": ["**", "!lambdas/dist", "!.sst", "!sst-env.d.ts"]
   },
   "formatter": {
     "enabled": true,
