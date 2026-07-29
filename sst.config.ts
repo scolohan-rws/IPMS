@@ -32,7 +32,7 @@ export default $config({
 
     api.route("GET /health", {
       name: `${$app.name}-${$app.stage}-health`,
-      handler: "lambda/index.handler",
+      handler: "lambdas/healthCheckLambda.handler",
       runtime: "nodejs24.x",
     });
 
@@ -60,7 +60,7 @@ export default $config({
 
     api.route("GET /secured", {
       name: `${$app.name}-${$app.stage}-api`,
-      handler: "lambda/secured.handler",
+      handler: "lambdas/securedLambda.handler",
       runtime: "nodejs24.x",
     },
       { auth: { lambda: authorizer.id } }

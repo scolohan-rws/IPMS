@@ -8,8 +8,8 @@ Available endpoint:
  
 | Method | Path | Auth | Handler |
 | --- | --- | --- | --- |
-| `GET` | `/health` | none | `lambda/health.ts` |
-| `GET` | `/secured` | bearer token | `lambda/api.ts` |
+| `GET` | `/health` | none | `lambdas/healthCheck.ts` |
+| `GET` | `/secured` | bearer token | `lambdas/securedLambda.ts` |
 
 Successful `/health` response:
  

@@ -10,7 +10,7 @@
     "remove": "sst remove",
     "dev": "sst dev",
     "start": "npm run build && node lambda/dist/index.js",
-    "test": "npm run build && node --test lambda/dist/index.test.js",
+    "test": "npm run build && node --test lambdas/dist/**/*.test.js",
     "typecheck": "tsc --noEmit",
     "watch": "tsc --watch"
   },

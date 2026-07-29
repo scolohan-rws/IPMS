@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { healthCheck } from "./index.js";
+import { healthCheck } from "./healthCheckLambda.js";
 
 test("GET /health returns a successful JSON response", async () => {
   const response = await healthCheck();
