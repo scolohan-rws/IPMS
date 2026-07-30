@@ -1,0 +1,12 @@
+if [ "${SKIP_LINT:-0}" = "1" ]; then
+  echo "WARNING: pre-commit lint skipped because SKIP_LINT=1"
+  exit 0
+fi
+
+echo "Formatting and linting staged files..."
+
+if ! npm run lint:staged; then
+  echo "ERROR: code quality checks failed. Review the file and line locations above."
+  echo "Run 'npm run format' and 'npm run lint:fix', or use SKIP_LINT=1 to bypass once."
+  exit 1
+fi

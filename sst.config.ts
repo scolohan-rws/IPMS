@@ -37,19 +37,26 @@ export default $config({
     });
 
     const authStage = $app.stage;
-    const authFnArn = aws.ssm.getParameterOutput({ name: `/ipms-auth/${authStage}/authorizer/arn` }).value;
-    const authFnInvokeArn = aws.ssm.getParameterOutput({ name: `/ipms-auth/${authStage}/authorizer/invoke-arn` }).value;
+    const authFnArn = aws.ssm.getParameterOutput({
+      name: `/ipms-auth/${authStage}/authorizer/arn`,
+    }).value;
+    const authFnInvokeArn = aws.ssm.getParameterOutput({
+      name: `/ipms-auth/${authStage}/authorizer/invoke-arn`,
+    }).value;
 
-    const authorizer = new aws.apigatewayv2.Authorizer("SharedTokenAuthorizer", {
-      apiId: api.nodes.api.id,
-      name: "tokenAuthorizer",
-      authorizerType: "REQUEST",
-      authorizerUri: authFnInvokeArn,
-      authorizerPayloadFormatVersion: "2.0",
-      enableSimpleResponses: true,
-      authorizerResultTtlInSeconds: 300,
-      identitySources: ["$request.header.Authorization"],
-    });
+    const authorizer = new aws.apigatewayv2.Authorizer(
+      "SharedTokenAuthorizer",
+      {
+        apiId: api.nodes.api.id,
+        name: "tokenAuthorizer",
+        authorizerType: "REQUEST",
+        authorizerUri: authFnInvokeArn,
+        authorizerPayloadFormatVersion: "2.0",
+        enableSimpleResponses: true,
+        authorizerResultTtlInSeconds: 300,
+        identitySources: ["$request.header.Authorization"],
+      },
+    );
 
     new aws.lambda.Permission("AllowAuthorizerInvoke", {
       action: "lambda:InvokeFunction",
@@ -58,17 +65,19 @@ export default $config({
       sourceArn: $interpolate`${api.nodes.api.executionArn}/authorizers/${authorizer.id}`,
     });
 
-    api.route("GET /secured", {
-      name: `${$app.name}-${$app.stage}-api`,
-      handler: "lambdas/securedLambda.handler",
-      runtime: "nodejs24.x",
-    },
-      { auth: { lambda: authorizer.id } }
+    api.route(
+      "GET /secured",
+      {
+        name: `${$app.name}-${$app.stage}-api`,
+        handler: "lambdas/securedLambda.handler",
+        runtime: "nodejs24.x",
+      },
+      { auth: { lambda: authorizer.id } },
     );
 
     return {
       healthUrl: $interpolate`${api.url}/health`,
-      securedUrl: $interpolate`${api.url}/secured`
+      securedUrl: $interpolate`${api.url}/secured`,
     };
   },
 });

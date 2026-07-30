@@ -6,9 +6,16 @@
   "main": "lambda/dist/index.js",
   "scripts": {
     "build": "tsc",
+    "check": "biome check .",
     "deploy": "sst deploy",
     "remove": "sst remove",
     "dev": "sst dev",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --write .",
+    "lint:staged": "lint-staged",
+    "prepare": "husky",
     "start": "npm run build && node lambda/dist/index.js",
     "test": "npm run build && node --test lambdas/dist/**/*.test.js",
     "typecheck": "tsc --noEmit",
@@ -21,8 +28,17 @@
     "sst": "4.17.1"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.5.6",
     "@types/aws-lambda": "8.10.162",
     "@types/node": "^20.14.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.2.0",
     "typescript": "^7.0.0"
+  },
+  "lint-staged": {
+    "*.{js,mjs,cjs,ts,mts,cts,tsx,json,jsonc}": [
+      "biome format --write --no-errors-on-unmatched",
+      "biome lint --no-errors-on-unmatched"
+    ]
   }
 }
