@@ -17,6 +17,12 @@ These rules apply to the entire repository.
   `npm run build`.
 - Put Lambda source in `lambdas/`.
 
+## Shared skills
+
+- Reusable project skills live in `.agents/skills/`.
+- For code reviews or audits, read and follow
+  `.agents/skills/code-review/SKILL.md`.
+
 ## Constants
 
 - Put reusable or potentially reusable static values in
@@ -83,6 +89,7 @@ These rules apply to the entire repository.
 - Use `node:test` and `node:assert/strict`. Cover success, validation, auth context,
   dependency errors, and error-to-status mapping; bug fixes require regression tests.
 - Update the endpoint and authentication tables in `README.md` with route changes.
-- Before handoff run `npm run check`, `npm run typecheck`, and `npm test`; for
-  `sst.config.ts`, `infra/`, or `constants/` changes also run `npx sst install`.
+- Before handing off code changes, run `npm run check`, `npm run typecheck`, and
+  `npm test`; review-only tasks follow the code-review skill instead. For
+  infrastructure or constants changes, also run `npx sst install`.
 - Change `package-lock.json` only when `package.json` dependencies change.
