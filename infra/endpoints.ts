@@ -2,9 +2,9 @@ import type { createApiGateway, createTokenAuthorizer } from "./api-gateway.js";
 import type { createLambdaDefinitions } from "./lambdas.js";
 
 interface RegisterEndpointsArgs {
-  api: ReturnType<typeof createApiGateway>;
-  authorizer: ReturnType<typeof createTokenAuthorizer>;
-  lambdas: ReturnType<typeof createLambdaDefinitions>;
+  api: Awaited<ReturnType<typeof createApiGateway>>;
+  authorizer: Awaited<ReturnType<typeof createTokenAuthorizer>>;
+  lambdas: Awaited<ReturnType<typeof createLambdaDefinitions>>;
 }
 
 export function registerEndpoints({
@@ -17,6 +17,10 @@ export function registerEndpoints({
   api.route("GET /health", lambdas.health);
 
   api.route("GET /secured", lambdas.secured, {
+    auth: { lambda: authorizer.id },
+  });
+
+  api.route("ANY /tasks/{proxy+}", lambdas.tasks, {
     auth: { lambda: authorizer.id },
   });
 

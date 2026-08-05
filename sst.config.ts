@@ -30,9 +30,9 @@ export default $config({
       import("./infra/lambdas.js"),
     ]);
 
-    const api = createApiGateway();
-    const authorizer = createTokenAuthorizer(api);
-    const lambdas = createLambdaDefinitions();
+    const api = await createApiGateway();
+    const authorizer = await createTokenAuthorizer(api);
+    const lambdas = await createLambdaDefinitions();
 
     return registerEndpoints({ api, authorizer, lambdas });
   },

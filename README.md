@@ -131,7 +131,15 @@ $env:SKIP_LINT="1"; git commit -m "message"; Remove-Item Env:SKIP_LINT
 Create `dev` and `prod` GitHub environments with these environment secrets:
 
 - `AWS_ACCESS_ROLE`: full ARN of the AWS deployment role
-- `AWS_REGION`
+- `AWS_REGION`: AWS deployment region, such as `eu-west-2`
+- `ACCOUNT_ID`: AWS account id
+- `RDS_DB_ID`: RDS DB Id
+- `DB_VPC_ID`: RDS VPC
+- `RDS_SG_ID`: RDS Security Group Id
+- `DB_HOST`: RDS DB host address
+- `DB_NAME`: RDS DB name
+- `DB_USER`: RDS username
+- `DB_PORT`: DB PORT
 
 The configured role must trust the repository's GitHub OIDC identity for the
 matching environment. Long-lived AWS access keys must not be stored in GitHub.
