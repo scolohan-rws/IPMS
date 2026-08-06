@@ -2,16 +2,14 @@ import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 import { Signer } from "@aws-sdk/rds-signer";
 import * as schema from "./schema/index.js";
-import {
-  DEFAULT_AWS_REGION,
-  POSTGRES_PORT,
-} from "../constants/app.constants.js";
+import { POSTGRES_PORT } from "../constants/app.constants.js";
 
 const HOST = process.env.DB_HOST as string;
+const REGION = process.env.AWS_REGION as string;
 const USER = process.env.DB_USER ?? "postgres";
 
 const signer = new Signer({
-  region: DEFAULT_AWS_REGION,
+  region: REGION,
   hostname: HOST,
   port: POSTGRES_PORT,
   username: USER,

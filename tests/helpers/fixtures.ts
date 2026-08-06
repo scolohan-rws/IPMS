@@ -1,6 +1,24 @@
 import type { RequestContext } from "@aws-lambda-powertools/event-handler/types";
 import type { APIGatewayProxyEventV2, Context } from "aws-lambda";
+import { vi } from "vitest";
+import type { Executor } from "../../src/data/types.js";
 import type { Task } from "../../src/db/schema/index.js";
+import type { TaskService } from "../../src/services/tasks.js";
+
+/**
+ * Stand-in for the Drizzle executor. Service specs mock the data layer, so the
+ * executor is only ever forwarded, never used.
+ */
+export const fakeExecutor = {} as unknown as Executor;
+
+/** A `TaskService` whose use cases are all stubs. */
+export const makeTaskService = () => ({
+  create: vi.fn<TaskService["create"]>(),
+  list: vi.fn<TaskService["list"]>(),
+  get: vi.fn<TaskService["get"]>(),
+  update: vi.fn<TaskService["update"]>(),
+  remove: vi.fn<TaskService["remove"]>(),
+});
 
 export const makeTask = (overrides: Partial<Task> = {}): Task => ({
   id: 1,

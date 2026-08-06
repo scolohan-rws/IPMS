@@ -1,15 +1,10 @@
-import { Router } from "@aws-lambda-powertools/event-handler/http";
 import type { APIGatewayProxyEventV2, Context } from "aws-lambda";
-import * as tasks from "../handlers/tasks.js";
+import { db } from "../db/index.js";
+import { createTasksRouter } from "../handlers/tasks.js";
 import { logger } from "../lib/logger.js";
+import { createTaskService } from "../services/tasks.js";
 
-const app = new Router();
-
-app.post("/tasks/create", tasks.createTaskHandler);
-app.get("/tasks/all", tasks.listTasksHandler);
-app.get("/tasks/:id", tasks.getTaskHandler);
-app.patch("/tasks/:id", tasks.updateTaskHandler);
-app.delete("/tasks/:id", tasks.deleteTaskHandler);
+const app = createTasksRouter(createTaskService(db));
 
 export const handler = async (
   event: APIGatewayProxyEventV2,

@@ -11,7 +11,7 @@ export function dbConnectPermission(
 ) {
   const accountId = process.env.ACCOUNT_ID;
   const rdsDbId = process.env.RDS_DB_ID;
-  const region = aws.getRegionOutput().name;
+  const region = aws.getRegionOutput().region;
 
   if (!accountId) throw new Error("ACCOUNT_ID is not set");
   if (!rdsDbId) throw new Error("RDS_DB_ID is not set");

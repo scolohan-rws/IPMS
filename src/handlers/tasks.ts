@@ -1,88 +1,59 @@
-import {
-  HttpError,
-  json,
-  parseBody,
-  parseParams,
-  withErrors,
-} from "../lib/http.js";
+import { Router } from "@aws-lambda-powertools/event-handler/http";
 import type { RequestContext } from "@aws-lambda-powertools/event-handler/types";
+import { json, parseBody, parseParams, withErrors } from "../lib/http.js";
 import {
   createTaskSchema,
   listTasksQuerySchema,
   taskIdParamSchema,
   updateTaskSchema,
 } from "../lib/schemas.js";
-import * as taskDal from "../data/tasks.js";
-import { db } from "../db/index.js";
-import { logger } from "../lib/logger.js";
+import type { TaskService } from "../services/tasks.js";
 
-export const createTaskHandler = withErrors(
-  async ({ event }: RequestContext) => {
-    const input = parseBody(createTaskSchema, event.body);
-    const task = await taskDal.createTask(db, input);
-    logger.info("Task created", { taskId: task.id, status: task.status });
-    return json(201, task);
-  },
-);
+export function createTaskHandlers(tasks: TaskService) {
+  return {
+    create: withErrors(async ({ event }: RequestContext) => {
+      const input = parseBody(createTaskSchema, event.body);
+      return json(201, await tasks.create(input));
+    }),
 
-export const listTasksHandler = withErrors(
-  async ({ event }: RequestContext) => {
-    const query = parseParams(
-      listTasksQuerySchema,
-      event.queryStringParameters,
-    );
+    list: withErrors(async ({ event }: RequestContext) => {
+      const query = parseParams(
+        listTasksQuerySchema,
+        event.queryStringParameters,
+      );
 
-    const items = await taskDal.listTasks(db, query);
-    logger.info("Tasks listed", {
-      count: items.length,
-      status: query.status,
-      limit: query.limit,
-      offset: query.offset,
-    });
+      const items = await tasks.list(query);
+      return json(200, { items, limit: query.limit, offset: query.offset });
+    }),
 
-    return json(200, { items, limit: query.limit, offset: query.offset });
-  },
-);
+    get: withErrors(async ({ params }: RequestContext) => {
+      const { id } = parseParams(taskIdParamSchema, params);
+      return json(200, await tasks.get(id));
+    }),
 
-export const getTaskHandler = withErrors(async ({ params }: RequestContext) => {
-  const { id } = parseParams(taskIdParamSchema, params);
+    update: withErrors(async ({ event, params }: RequestContext) => {
+      const { id } = parseParams(taskIdParamSchema, params);
+      const patch = parseBody(updateTaskSchema, event.body);
+      return json(200, await tasks.update(id, patch));
+    }),
 
-  const task = await taskDal.getTaskById(db, id);
-  if (!task) {
-    logger.warn("Task not found", { taskId: id });
-    throw new HttpError(404, `Task ${id} not found`);
-  }
+    remove: withErrors(async ({ params }: RequestContext) => {
+      const { id } = parseParams(taskIdParamSchema, params);
+      await tasks.remove(id);
+      return json(204, null);
+    }),
+  };
+}
 
-  return json(200, task);
-});
+export function createTasksRouter(tasks: TaskService): Router {
+  const handlers = createTaskHandlers(tasks);
+  const router = new Router();
 
-export const updateTaskHandler = withErrors(
-  async ({ event, params }: RequestContext) => {
-    const { id } = parseParams(taskIdParamSchema, params);
+  router.post("/tasks/create", handlers.create);
+  router.get("/tasks/all", handlers.list);
+  router.get("/tasks/:id", handlers.get);
+  router.patch("/tasks/:id", handlers.update);
+  router.delete("/tasks/:id", handlers.remove);
 
-    const input = parseBody(updateTaskSchema, event.body);
-    const task = await taskDal.updateTask(db, id, input);
-    if (!task) {
-      logger.warn("Task not found for update", { taskId: id });
-      throw new HttpError(404, `Task ${id} not found`);
-    }
-
-    logger.info("Task updated", { taskId: id, fields: Object.keys(input) });
-    return json(200, task);
-  },
-);
-
-export const deleteTaskHandler = withErrors(
-  async ({ params }: RequestContext) => {
-    const { id } = parseParams(taskIdParamSchema, params);
-
-    const deleted = await taskDal.deleteTask(db, id);
-    if (!deleted) {
-      logger.warn("Task not found for delete", { taskId: id });
-      throw new HttpError(404, `Task ${id} not found`);
-    }
-
-    logger.info("Task deleted", { taskId: id });
-    return json(204, null);
-  },
-);
+  return router;
+}

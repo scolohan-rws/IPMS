@@ -1,6 +1,7 @@
 // Application
 export const APP_NAME = "ipms";
 export const PRODUCTION_STAGE = "prod";
+export const LAMBDA_PATH = "src/lambdas/";
 
 // AWS
 export const DEFAULT_AWS_REGION = "eu-west-2";

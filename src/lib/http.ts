@@ -1,4 +1,5 @@
 import z from "zod";
+import { NotFoundError } from "./errors.js";
 import { logger } from "./logger.js";
 
 type HandlerResult = {
@@ -62,6 +63,11 @@ export function withErrors<E>(
     try {
       return await fn(event);
     } catch (err) {
+      if (err instanceof NotFoundError) {
+        logger.warn("Resource not found", { message: err.message });
+        return json(404, { error: err.message });
+      }
+
       if (err instanceof HttpError) {
         logger.warn("Request rejected", {
           statusCode: err.statusCode,
@@ -75,7 +81,7 @@ export function withErrors<E>(
         });
       }
 
-      logger.error("Unhandled error in task handler", { error: err });
+      logger.error("Unhandled error in handler", { error: err });
       return json(500, { error: "Internal server error" });
     }
   };
