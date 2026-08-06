@@ -2,6 +2,7 @@
 export const APP_NAME = "ipms";
 export const DEVELOPMENT_STAGE = "dev";
 export const PRODUCTION_STAGE = "prod";
+export const LAMBDA_PATH = "src/lambdas/";
 
 // Authentication
 export const DEV_TOKEN_TTL_SECONDS = 86_400; // 24 hours

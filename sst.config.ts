@@ -3,7 +3,7 @@
 export default $config({
   async app(input) {
     const { APP_NAME, DEFAULT_AWS_REGION, PRODUCTION_STAGE } = await import(
-      "./constants/infrastructure.constants.js"
+      "./src/constants/app.constants"
     );
     const isProduction = input.stage === PRODUCTION_STAGE;
 

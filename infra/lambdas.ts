@@ -1,7 +1,4 @@
-import {
-  LAMBDA_PATH,
-  LAMBDA_RUNTIME,
-} from "../constants/infrastructure.constants.js";
+import { LAMBDA_PATH, LAMBDA_RUNTIME } from "../src/constants/app.constants";
 import { withDbAccess } from "./with-db-access.js";
 
 export async function createLambdaDefinitions() {
