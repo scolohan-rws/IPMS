@@ -19,6 +19,15 @@ jobs:
       ENVIRONMENT: ${{ github.event.release.prerelease == true && 'dev' || 'prod' }}
       AWS_REGION: ${{ secrets.AWS_REGION }}
       BUILD_VERSION: ${{ github.event.release.tag_name }}
+      ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
+      RDS_DB_ID: ${{ secrets.RDS_DB_ID }}
+      DB_VPC_ID: ${{ secrets.DB_VPC_ID }}
+      RDS_SG_ID: ${{ secrets.RDS_SG_ID }}
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PORT: ${{ secrets.DB_PORT }}
+      LOG_LEVEL: ${{ secrets.LOG_LEVEL }}
 
     steps:
       - name: Checkout
