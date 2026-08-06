@@ -3,7 +3,7 @@
 export default $config({
   async app(input) {
     const { APP_NAME, DEFAULT_AWS_REGION, PRODUCTION_STAGE } = await import(
-      "./constants/infrastructure.constants.js"
+      "./src/constants/app.constants"
     );
     const isProduction = input.stage === PRODUCTION_STAGE;
 
@@ -30,9 +30,9 @@ export default $config({
       import("./infra/lambdas.js"),
     ]);
 
-    const api = createApiGateway();
-    const authorizer = createTokenAuthorizer(api);
-    const lambdas = createLambdaDefinitions();
+    const api = await createApiGateway();
+    const authorizer = await createTokenAuthorizer(api);
+    const lambdas = await createLambdaDefinitions();
 
     return registerEndpoints({ api, authorizer, lambdas });
   },

@@ -2,7 +2,7 @@ import {
   API_GATEWAY_PRINCIPAL,
   AUTHORIZER_INVOKE_PERMISSION_NAME,
   LAMBDA_INVOKE_ACTION,
-} from "../constants/infrastructure.constants.js";
+} from "../src/constants/app.constants";
 
 export function createApiGateway() {
   return new sst.aws.ApiGatewayV2("ipms-api", {
